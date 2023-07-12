@@ -8,6 +8,7 @@ const express = require("express");
 const app = express();
 const expressLayouts = require("express-ejs-layouts");
 const bodyParser = require("body-parser"); // needed for parsing info from forms
+const methodOverride = require("method-override"); // needed for delete and put for author with form
 
 // Routes
 const indexRouter = require("./routes/index");
@@ -21,6 +22,7 @@ app.set("layout", "layouts/layout"); // every single file is put in the layout f
 app.use(expressLayouts); // use expresslayouts
 app.use(express.static("public")); // folder for static files
 app.use(bodyParser.urlencoded({ limit: "10mb", extended: false })); // we increased limit of what we can parse from body and we allow body parsing
+app.use(methodOverride("_method")); // use _ and the method so either delete or put
 
 // Database connection
 const mongoose = require("mongoose");
