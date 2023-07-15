@@ -23,6 +23,7 @@ router.get("/new", (req, res) => {
   res.render("authors/new", { author: new Author() });
 });
 
+// Create Author
 router.post("/", async (req, res) => {
   const author = new Author({
     name: req.body.name,
@@ -38,6 +39,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// View author
 router.get("/:id", async (req, res) => {
   try {
     const author = await Author.findById(req.params.id);
@@ -47,6 +49,8 @@ router.get("/:id", async (req, res) => {
     res.redirect("/");
   }
 });
+
+// Edit author
 router.get("/:id/edit", async (req, res) => {
   const author = await Author.findById(req.params.id);
   try {

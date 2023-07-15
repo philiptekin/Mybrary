@@ -1,0 +1,41 @@
+@import "shared/fonts.css";
+@import "shared/variables.css";
+@import "shared/header.css";
+/*Uses gotham rounded fonts fron fonts.css*/
+:root {
+  font-family: "Gotham Rounded";
+  font-size: 20px;
+  color: var(--color-text-light);
+}
+
+/*Select all elements, before and after elements aswell*/
+*,
+*::before,
+*::after {
+  box-sizing: "border-box";
+}
+
+/*Change background colour of all pages*/
+/*color-background variables comes from variables.css*/
+body {
+  background: linear-gradient(
+    to right,
+    var(--color-background-dark),
+    var(--color-background-light)
+  );
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  margin-bottom: 3rem;
+}
+
+.inner-container {
+  margin: 0 2rem;
+}
+
+.page-header {
+  font-size: 2rem;
+  font-weight: 500;
+}

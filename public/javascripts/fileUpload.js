@@ -1,3 +1,4 @@
+// Settings for FilePond, uploading book covers
 FilePond.registerPlugin(
   FilePondPluginImagePreview,
   FilePondPluginImageResize,
