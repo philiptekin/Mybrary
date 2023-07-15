@@ -1,0 +1,67 @@
+:root {
+  --color-btn-primary-background: hsl(var(--color-base-hue), 100%, 83%);
+  --color-btn-primary-text: hsl(var(--color-base-hue), 100%, 20%);
+  --color-btn-border: black;
+
+  --color-btn-danger-background: hsl(var(--color-danger-hue), 100%, 83%);
+  --color-btn-danger-text: black;
+
+  /*Colors for hover, slightly darker than normal color*/
+  --color-btn-primary-background-dark: hsl(var(--color-base-hue), 100%, 73%);
+  --color-btn-primary-text-dark: hsl(var(--color-base-hue), 100%, 10%);
+
+  --color-btn-danger-background-dark: hsl(var(--color-danger-hue), 100%, 73%);
+  --color-btn-danger-text-dark: black;
+}
+
+/*Model for all buttons*/
+.btn {
+  border: 1px solid var(--color-btn-border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.5rem 0.5rem;
+  font-size: 1rem;
+  font-family: "Gotham Rounded";
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+/*Space out buttons*/
+.btn-row {
+  display: flex;
+  align-items: flex-start; /*Align beginning of container*/
+}
+/*Select all children of btn row which is all buttons on the page*/
+.btn-row > * {
+  margin-left: 0.5rem;
+  margin-top: 0.3rem;
+}
+
+/*Remove spacing on first button*/
+.btn-row > *:first-child {
+  margin-left: 0;
+}
+
+/*Normal buttons*/
+.btn-primary {
+  color: var(--color-btn-primary-text);
+  background-color: var(--color-btn-primary-background);
+}
+
+/*Normal buttons hover*/
+.btn-primary:hover {
+  color: var(--color-btn-primary-text-dark);
+  background-color: var(--color-btn-primary-background-dark);
+}
+
+/*Danger button*/
+.btn-danger {
+  color: var(--color-btn-danger-text);
+  background-color: var(--color-btn-danger-background);
+}
+
+/*Danger button hover*/
+.btn-danger:hover {
+  color: var(--color-btn-danger-text-dark);
+  background-color: var(--color-btn-danger-background-dark);
+}
