@@ -1,0 +1,94 @@
+:root {
+  --form-label-font-size: 1.2rem;
+  --form-input-background-color: hsl(var(--color-base-hue), 100%, 31%);
+  --form-input-border-color: hsl(var(--color-base-hue), 100%, 50%);
+  --form-input-border-color-light: hsl(var(--color-base-hue), 100%, 80%);
+}
+
+/* Position each row*/
+.form-row {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+/* Position each item in a row*/
+.form-item {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2rem;
+  flex-grow: 1;
+  flex-basis: 0; /* Grow from same point*/
+}
+
+/* Makes the first child of a row to not have margin left*/
+.form-item:first-child {
+  margin-left: 0;
+}
+
+/* Makes it so that cover is not extended fully*/
+.form-item-no-grow {
+  flex-grow: 0;
+}
+
+/* Pushes buttons to the right*/
+.form-row-end {
+  justify-content: flex-end;
+}
+
+/* Label styles*/
+.form-item > label {
+  font-size: var(--form-label-font-size);
+  margin-bottom: 0.25rem;
+  margin-left: 0.25rem;
+}
+
+/* Design all boxes*/
+.form-item input,
+.form-item select,
+.form-item textarea {
+  height: 2rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--form-input-border-color);
+  background-color: var(--form-input-background-color);
+  color: var(--color-text-light);
+  font-size: 1rem;
+  font-weight: normal;
+  font-family: "Gotham Rounded";
+  outline: none;
+}
+
+/* Only target textarea which is description to be not resizable*/
+.form-item textarea {
+  height: 100%;
+  resize: none;
+}
+
+/* Makes dropdown windows have different color on select*/
+.form-item select option {
+  background-color: darkslategray;
+}
+
+/* Focus is when we clicked inside any box it will show a white border*/
+.form-item input:focus,
+.form-item select:focus,
+.form-item textarea:focus {
+  border-color: var(--form-input-border-color-light);
+}
+/* Change font and text placement for filepond*/
+.filepond--root {
+  font-family: "Gotham Rounded";
+  margin-bottom: 0;
+}
+
+/* Change background color for filepond*/
+.filepond--panel-root {
+  background-color: var(--form-input-background-color);
+  border: 1px solid var(--form-input-border-color);
+}
+
+/* Change text color for filepond*/
+.filepond--drop-label {
+  color: var(--color-text-light);
+  font-size: inherit; /* Same font size as the others*/
+}
