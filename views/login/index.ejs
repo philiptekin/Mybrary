@@ -1,0 +1,25 @@
+<h2 class="page-header">Login User</h2>
+<div class="error-message">
+<% if (messages.error) {%>
+    <%= messages.error%>
+    <% } %>
+</div>
+
+<form action="/login" method="POST">
+<div>
+    <div>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name"  />
+    </div>
+    <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+    </div>
+</div>
+<div>
+    <button class="btn btn-primary" type="submit">Login</button>
+</div>
+<div>
+    <a class="login-text" href="../register">Not Registered?</a>
+</div>
+</form>

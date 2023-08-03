@@ -44,5 +44,5 @@ bookSchema.virtual("coverImagePath").get(function () {
   
 });
 
-// Author is name of table in database
+// Book is name of table in database
 module.exports = mongoose.model("Book", bookSchema);

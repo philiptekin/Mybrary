@@ -12,7 +12,18 @@ router.get("/", async (req, res) => {
   }
   try {
     const authors = await Author.find(searchOptions); //empty javascript object means select all from table
-    res.render("authors/index", { authors: authors, searchOptions: req.query });
+    if (req.user) {
+      res.render("authors/index", {
+        authors: authors,
+        searchOptions: req.query,
+        user: req.user,
+      });
+    } else {
+      res.render("authors/index", {
+        authors: authors,
+        searchOptions: req.query,
+      });
+    }
   } catch {
     res.redirect("/");
   }
@@ -20,7 +31,11 @@ router.get("/", async (req, res) => {
 
 // New author route
 router.get("/new", (req, res) => {
-  res.render("authors/new", { author: new Author() });
+  if (req.user) {
+    res.render("authors/new", { author: new Author(), user: req.user });
+  } else {
+    res.render("authors/new", { author: new Author() });
+  }
 });
 
 // Create Author

@@ -1,0 +1,16 @@
+* När man loggar in:
+redirect till sin profil
+visa namn i header
+dölj login i header
+visa logout i header
+visa profile i header
+kunna logga ut
+
+* Bara admins kan lägga till authors och böcker samt bara de kan se add authors och add books i header!
+
+
+
+
+Problem atm:
+req.user skickas inte i redirect så kan inte
+göra så att header renderas properly i alla pages.
