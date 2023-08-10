@@ -9,7 +9,11 @@ router.get("/", async (req, res) => {
   } catch {
     books = [];
   }
-  res.render("index", { books: books });
+  if (req.user) {
+    res.render("index", { books: books, user: req.user });
+  } else {
+    res.render("index", { books: books });
+  }
 });
 
 module.exports = router;

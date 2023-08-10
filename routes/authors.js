@@ -47,10 +47,18 @@ router.post("/", async (req, res) => {
     const newAuthor = await author.save(); // wait for asyncronous mongoose save
     res.redirect(`authors/${newAuthor.id}`);
   } catch {
-    res.render("authors/new", {
-      author: author,
-      errorMessage: "Error creating Author",
-    });
+    if (req.user) {
+      res.render("authors/new", {
+        author: author,
+        errorMessage: "Error creating Author",
+        user: req.user,
+      });
+    } else {
+      res.render("authors/new", {
+        author: author,
+        errorMessage: "Error creating Author",
+      });
+    }
   }
 });
 
@@ -59,7 +67,15 @@ router.get("/:id", async (req, res) => {
   try {
     const author = await Author.findById(req.params.id);
     const books = await Book.find({ author: author.id }).limit(6).exec(); // Show max 6 author books
-    res.render("authors/show", { author: author, booksByAuthor: books });
+    if (req.user) {
+      res.render("authors/show", {
+        author: author,
+        booksByAuthor: books,
+        user: req.user,
+      });
+    } else {
+      res.render("authors/show", { author: author, booksByAuthor: books });
+    }
   } catch {
     res.redirect("/");
   }
@@ -69,7 +85,11 @@ router.get("/:id", async (req, res) => {
 router.get("/:id/edit", async (req, res) => {
   const author = await Author.findById(req.params.id);
   try {
-    res.render("authors/edit", { author: author });
+    if (req.user) {
+      res.render("authors/edit", { author: author, user: req.user });
+    } else {
+      res.render("authors/edit", { author: author });
+    }
   } catch {
     res.redirect("/authors");
   }
@@ -88,10 +108,18 @@ router.put("/:id", async (req, res) => {
       // if we dont find author in try
       res.redirect("/"); // Redirect to home page
     } else {
-      res.render("authors/edit", {
-        author: author,
-        errorMessage: "Error updating Author",
-      });
+      if (req.user) {
+        res.render("authors/edit", {
+          author: author,
+          errorMessage: "Error updating Author",
+          user: req.user,
+        });
+      } else {
+        res.render("authors/edit", {
+          author: author,
+          errorMessage: "Error updating Author",
+        });
+      }
     }
   }
 });

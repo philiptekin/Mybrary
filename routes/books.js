@@ -20,15 +20,27 @@ router.get("/", async (req, res) => {
   }
   try {
     const books = await query.exec(); // Wait to execute query
-    res.render("books/index", { books: books, searchOptions: req.query });
+    if (req.user) {
+      res.render("books/index", {
+        books: books,
+        searchOptions: req.query,
+        user: req.user,
+      });
+    } else {
+      res.render("books/index", { books: books, searchOptions: req.query });
+    }
   } catch {
     res.redirect("/");
   }
 });
 
 // New Book route
-router.get("/new", async (req, res) => {
-  renderNewPage(res, new Book());
+router.get("/new", checkIfAuthenticated, async (req, res) => {
+  if (req.user) {
+    renderNewPage(res, req, new Book(), false, true);
+  } else {
+    renderNewPage(res, req, new Book(), false, false);
+  }
 });
 
 // Create Book route
@@ -41,12 +53,15 @@ router.post("/", async (req, res) => {
     description: req.body.description,
   });
   saveCover(book, req.body.cover);
-
   try {
     const newBook = await book.save();
     res.redirect(`books/${newBook.id}`);
   } catch {
-    renderNewPage(res, Book(), true);
+    if (req.user) {
+      renderNewPage(res, req, Book(), true, true);
+    } else {
+      renderNewPage(res, req, Book(), true, false);
+    }
   }
 });
 
@@ -54,7 +69,11 @@ router.post("/", async (req, res) => {
 router.get("/:id/edit", async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
-    renderEditPage(res, book);
+    if (req.user) {
+      renderEditPage(res, req, book, false, true);
+    } else {
+      renderEditPage(res, req, book, false, false);
+    }
   } catch {
     res.redirect("/");
   }
@@ -65,7 +84,11 @@ router.get("/:id", async (req, res) => {
   try {
     // Populate looks for author info on the page and sends it here
     const book = await Book.findById(req.params.id).populate("author").exec();
-    res.render("books/show", { book: book });
+    if (req.user) {
+      res.render("books/show", { book: book, user: req.user });
+    } else {
+      res.render("books/show", { book: book });
+    }
   } catch {
     res.redirect("/");
   }
@@ -91,7 +114,11 @@ router.put("/:id", async (req, res) => {
     res.redirect(`/books/${book.id}`);
   } catch {
     if (book != null) {
-      renderEditPage(res, book, true);
+      if (req.user) {
+        renderEditPage(res, req, book, true, true);
+      } else {
+        renderEditPage(res, req, book, true, false);
+      }
     } else {
       res.redirect("/");
     }
@@ -107,10 +134,18 @@ router.delete("/:id", async (req, res) => {
     res.redirect("/books");
   } catch {
     if (book != null) {
-      res.render("books/show", {
-        book: book,
-        errorMessage: "Could not remove book",
-      });
+      if (req.user) {
+        res.render("books/show", {
+          book: book,
+          errorMessage: "Could not remove book",
+          user: req.user,
+        });
+      } else {
+        res.render("books/show", {
+          book: book,
+          errorMessage: "Could not remove book",
+        });
+      }
     } else {
       res.redirect("/");
     }
@@ -118,17 +153,17 @@ router.delete("/:id", async (req, res) => {
 });
 
 // Render New Page For Book
-async function renderNewPage(res, book, hasError = false) {
-  renderFormPage(res, book, "new");
+async function renderNewPage(res, req, book, hasError = false, hasUser) {
+  renderFormPage(res, req, book, "new", hasError, hasUser);
 }
 
 // Render Edit Page For Book
-async function renderEditPage(res, book, hasError = false) {
-  renderFormPage(res, book, "edit");
+async function renderEditPage(res, req, book, hasError = false, hasUser) {
+  renderFormPage(res, req, book, "edit", hasError, hasUser);
 }
 
 // Form Used By Previous Functions To Render Pages
-async function renderFormPage(res, book, form, hasError = false) {
+async function renderFormPage(res, req, book, form, hasError = false, hasUser) {
   try {
     const authors = await Author.find({}); // wait to find all authors in db
     const params = { authors: authors, book: book };
@@ -139,6 +174,10 @@ async function renderFormPage(res, book, form, hasError = false) {
         params.errorMessage = "Error Creating Book";
       }
     }
+    // If user is authenticated then send user
+    if (hasUser) {
+      params.user = req.user;
+    }
     res.render(`books/${form}`, params);
   } catch {
     res.redirect("/books");
@@ -147,12 +186,19 @@ async function renderFormPage(res, book, form, hasError = false) {
 
 // Saves Cover Of A Book
 function saveCover(book, coverEncoded) {
-  if (coverEncoded == null) return;
+  if (coverEncoded == null || coverEncoded === "") return;
   const cover = JSON.parse(coverEncoded);
   if (cover != null && imageMimeTypes.includes(cover.type)) {
     book.coverImage = new Buffer.from(cover.data, "base64"); // Convert from base64
     book.coverImageType = cover.type;
   }
+}
+
+function checkIfAuthenticated(req, res, next) {
+  if (!req.isAuthenticated()) {
+    return res.redirect("/");
+  }
+  next();
 }
 
 module.exports = router;
